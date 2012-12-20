@@ -2,7 +2,7 @@ Import xmas
 
 Class Scene
 
-	Const SNOWFLAKE_CHANCE:Float = 0.1
+	Const SNOWFLAKE_CHANCE:Float = 0.2
 
 	Global Background:Image
 	Global Width:Int = 360
@@ -128,6 +128,30 @@ Class Scene
 		Return FloorStartY + Sin(tX * FloorHFlux) * FloorVFlux
 	End
 	
+	Method CheckRectAgainstScene:Bool(X:Float, Y:Float, W:Float, H:Float)
+		Local good:Bool = True
+		
+		For Local tH:House = EachIn Houses
+			If RectOverRect(X, Y, W, H, tH.X, tH.Y, House.WIDTH, House.HEIGHT)
+				good = False
+			EndIf
+		Next
+		
+		For Local tT:Tree = EachIn Trees
+			If RectOverRect(X, Y, W, H, tT.X, tT.Y, Tree.WIDTH, Tree.HEIGHT)
+				good = False
+			EndIf
+		Next
+		
+		For Local tS:Snowman = EachIn Snowmen
+			If RectOverRect(X, Y, W, H, tS.X, tS.Y, Snowman.WIDTH, Snowman.HEIGHT)
+				good = False
+			EndIf
+		Next
+		
+		Return good
+	End
+	
 End
 
 Function GenerateScene:Scene()
@@ -137,7 +161,7 @@ Function GenerateScene:Scene()
 	tS.FloorStartY = Rnd(Scene.Height  - 64,Scene.Height * 0.9)
 	Local fY:Float = tS.FloorStartY
 	tS.FloorHFlux = Rnd(1.0,2.0)
-	tS.FloorVFlux = Rnd(5,10)
+	tS.FloorVFlux = Rnd(5, 6)
 	For Local i:Int = 0 Until tS.FloorSegmentCount
 		Local fX:Int = (i * FloorSegment.Width)
 		tS.FloorSegments[i].SetPos(fX,fY)
@@ -156,17 +180,27 @@ Function GenerateScene:Scene()
 		tS.Stars.AddLast(tStar)
 	Next
 	
+		' Houses
+	tSC = 1
+	For Local i:Int = 0 Until tSC
+		Local tH:House = New House(tS)
+		Local tX:Int = Rnd(8, Scene.Width - 48)
+		Local tY:Float = tS.GetFloorYAtX(tX)
+		tH.SetPos(tX, tY - 46)
+		tS.Houses.AddLast(tH)
+	Next
+	
 	
 	' Trees
-	tSC = Rnd(0,4)
+	tSC = Rnd(1, 5)
 	For Local i:Int = 0 Until tSC
 		tS.Trees.AddLast(GenerateTree(tS))
 	Next
 	
-	' Houses
+
 	
 	' Snowmen
-	tSC = Rnd(0,4)
+	tSC = 1' Rnd(0,4)
 	For Local i:Int = 0 Until tSC
 		tS.Snowmen.AddLast(GenerateSnowman(tS))
 	Next

@@ -2100,9 +2100,13 @@ class bb__XmasApp : bb_app_App{
 		bb_sfx_SFX.g_Init();
 		bb_autofit.bb_autofit_SetVirtualDisplay(360,240,1.0f);
 		f_scene=bb_scene.bb_scene_GenerateScene();
+		bb_audio.bb_audio_PlayMusic("mus/sleigh.mp3",1);
 		return 1;
 	}
 	public override int m_OnUpdate(){
+		if((bb_input.bb_input_KeyHit(32))!=0){
+			f_scene=bb_scene.bb_scene_GenerateScene();
+		}
 		f_scene.m_Update();
 		return 1;
 	}
@@ -2330,6 +2334,12 @@ class bb_scene_Scene : Object{
 		return this;
 	}
 	public static int g_Height;
+	public float f_FloorStartY=.0f;
+	public float f_FloorHFlux=.0f;
+	public float f_FloorVFlux=.0f;
+	public virtual float m_GetFloorYAtX(float t_tX){
+		return f_FloorStartY+(float)Math.Sin((t_tX*f_FloorHFlux)*bb_std_lang.D2R)*f_FloorVFlux;
+	}
 	public virtual void m_AddSnowFlake(){
 		bb_snowflake_Snowflake t_tS=(new bb_snowflake_Snowflake()).g_Snowflake_new(this);
 		if(bb_random.bb_random_Rnd()<0.5f){
@@ -2339,8 +2349,8 @@ class bb_scene_Scene : Object{
 			t_tS.f_X=bb_random.bb_random_Rnd2(-5.0f,(float)(g_Width-5));
 			t_tS.f_Y=-10.0f;
 		}
-		t_tS.f_Frame=(int)(bb_random.bb_random_Rnd2(0.0f,10.0f));
-		t_tS.f_XS=bb_random.bb_random_Rnd2(-2.0f,4.0f);
+		t_tS.f_Frame=(int)(bb_random.bb_random_Rnd2(0.0f,7.0f));
+		t_tS.f_XS=bb_random.bb_random_Rnd2(-1.0f,2.0f);
 		t_tS.f_YS=bb_random.bb_random_Rnd2(0.1f,1.0f);
 		f_Snowflakes.m_AddLast5(t_tS);
 	}
@@ -2350,22 +2360,22 @@ class bb_scene_Scene : Object{
 			bb_tree_Tree t_tTree=t_.m_NextObject();
 			t_tTree.m_Update();
 		}
-		bb_list_Enumerator2 t_2=f_Houses.m_ObjectEnumerator();
+		bb_list_Enumerator3 t_2=f_Houses.m_ObjectEnumerator();
 		while(t_2.m_HasNext()){
 			bb_house_House t_tHouse=t_2.m_NextObject();
 			t_tHouse.m_Update();
 		}
-		bb_list_Enumerator3 t_3=f_Stars.m_ObjectEnumerator();
+		bb_list_Enumerator4 t_3=f_Stars.m_ObjectEnumerator();
 		while(t_3.m_HasNext()){
 			bb_star_Star t_tStar=t_3.m_NextObject();
 			t_tStar.m_Update();
 		}
-		bb_list_Enumerator4 t_4=f_Snowmen.m_ObjectEnumerator();
+		bb_list_Enumerator5 t_4=f_Snowmen.m_ObjectEnumerator();
 		while(t_4.m_HasNext()){
 			bb_snowman_Snowman t_tSnowman=t_4.m_NextObject();
 			t_tSnowman.m_Update();
 		}
-		bb_list_Enumerator5 t_5=f_Snowflakes.m_ObjectEnumerator();
+		bb_list_Enumerator6 t_5=f_Snowflakes.m_ObjectEnumerator();
 		while(t_5.m_HasNext()){
 			bb_snowflake_Snowflake t_tSnowflake=t_5.m_NextObject();
 			t_tSnowflake.m_Update();
@@ -2378,23 +2388,25 @@ class bb_scene_Scene : Object{
 		bb_graphics.bb_graphics_SetColor(255.0f,255.0f,255.0f);
 		bb_graphics.bb_graphics_SetAlpha(1.0f);
 		bb_graphics.bb_graphics_DrawImage(g_Background,0.0f,0.0f,0);
-		bb_list_Enumerator3 t_=f_Stars.m_ObjectEnumerator();
+		bb_list_Enumerator4 t_=f_Stars.m_ObjectEnumerator();
 		while(t_.m_HasNext()){
 			bb_star_Star t_tStar=t_.m_NextObject();
 			t_tStar.m_Render();
 		}
+		bb_graphics.bb_graphics_SetAlpha(1.0f);
 		f_moon.m_Render();
 		bb_list_Enumerator t_2=f_Trees.m_ObjectEnumerator();
 		while(t_2.m_HasNext()){
 			bb_tree_Tree t_tTree=t_2.m_NextObject();
 			t_tTree.m_Render();
 		}
-		bb_list_Enumerator2 t_3=f_Houses.m_ObjectEnumerator();
+		bb_graphics.bb_graphics_SetAlpha(1.0f);
+		bb_list_Enumerator3 t_3=f_Houses.m_ObjectEnumerator();
 		while(t_3.m_HasNext()){
 			bb_house_House t_tHouse=t_3.m_NextObject();
 			t_tHouse.m_Render();
 		}
-		bb_list_Enumerator4 t_4=f_Snowmen.m_ObjectEnumerator();
+		bb_list_Enumerator5 t_4=f_Snowmen.m_ObjectEnumerator();
 		while(t_4.m_HasNext()){
 			bb_snowman_Snowman t_tSnowman=t_4.m_NextObject();
 			t_tSnowman.m_Render();
@@ -2402,7 +2414,7 @@ class bb_scene_Scene : Object{
 		for(int t_i=0;t_i<f_FloorSegmentCount;t_i=t_i+1){
 			f_FloorSegments[t_i].m_Render();
 		}
-		bb_list_Enumerator5 t_5=f_Snowflakes.m_ObjectEnumerator();
+		bb_list_Enumerator6 t_5=f_Snowflakes.m_ObjectEnumerator();
 		while(t_5.m_HasNext()){
 			bb_snowflake_Snowflake t_tSnowflake=t_5.m_NextObject();
 			t_tSnowflake.m_Render();
@@ -2581,13 +2593,48 @@ class bb_floorsegment_FloorSegment : Object{
 		f_Y=t_tY;
 	}
 	public virtual void m_Render(){
-		bb_gfx_GFX.g_Draw(f_X,f_Y,0,96,g_Width,64);
+		bb_gfx_GFX.g_Draw(f_X,f_Y,0,96,g_Width,100);
 	}
 }
 class bb_tree_Tree : Object{
+	public bb_scene_Scene f_scene=null;
+	public bb_list_List6 f_Lights=null;
+	public virtual bb_tree_Tree g_Tree_new(bb_scene_Scene t_tS){
+		f_scene=t_tS;
+		f_Lights=(new bb_list_List6()).g_List_new();
+		return this;
+	}
+	public virtual bb_tree_Tree g_Tree_new2(){
+		return this;
+	}
+	public int f_Frame=0;
+	public float f_X=.0f;
+	public float f_Y=.0f;
+	public virtual void m_SetPos2(float t_tX,float t_tY){
+		f_X=t_tX;
+		f_Y=t_tY;
+	}
+	public int f_BlinkRate=0;
+	public int f_BlinkRateTimer=0;
 	public virtual void m_Update(){
+		f_BlinkRateTimer+=1;
+		if(f_BlinkRateTimer>=f_BlinkRate){
+			f_BlinkRateTimer=0;
+			bb_list_Enumerator2 t_=f_Lights.m_ObjectEnumerator();
+			while(t_.m_HasNext()){
+				bb_treelight_TreeLight t_tTL=t_.m_NextObject();
+				t_tTL.m_Blink();
+			}
+		}
 	}
 	public virtual void m_Render(){
+		bb_graphics.bb_graphics_SetAlpha(1.0f);
+		bb_gfx_GFX.g_Draw((int)(f_X),(int)(f_Y),16+f_Frame*16,96,16,32);
+		bb_list_Enumerator2 t_=f_Lights.m_ObjectEnumerator();
+		while(t_.m_HasNext()){
+			bb_treelight_TreeLight t_tTL=t_.m_NextObject();
+			t_tTL.m_Render();
+		}
 	}
 }
 class bb_list_List : Object{
@@ -2660,8 +2707,8 @@ class bb_list_List2 : Object{
 		}
 		return this;
 	}
-	public virtual bb_list_Enumerator2 m_ObjectEnumerator(){
-		return (new bb_list_Enumerator2()).g_Enumerator_new(this);
+	public virtual bb_list_Enumerator3 m_ObjectEnumerator(){
+		return (new bb_list_Enumerator3()).g_Enumerator_new(this);
 	}
 }
 class bb_list_Node2 : Object{
@@ -2689,9 +2736,38 @@ class bb_list_HeadNode2 : bb_list_Node2{
 	}
 }
 class bb_star_Star : Object{
+	public bb_scene_Scene f_scene=null;
+	public virtual bb_star_Star g_Star_new(bb_scene_Scene t_tS){
+		f_scene=t_tS;
+		return this;
+	}
+	public virtual bb_star_Star g_Star_new2(){
+		return this;
+	}
+	public int f_X=0;
+	public int f_Y=0;
+	public virtual int m_SetPos2(float t_tX,float t_tY){
+		f_X=(int)(t_tX);
+		f_Y=(int)(t_tY);
+		return 0;
+	}
+	public float f_alpha=.0f;
+	public int f_changeTimer=0;
+	public int f_Frame=0;
 	public virtual void m_Update(){
+		f_changeTimer+=1;
+		if(f_changeTimer>=10){
+			if(bb_random.bb_random_Rnd()<0.25f){
+				f_Frame=(int)(bb_random.bb_random_Rnd2(0.0f,5.0f));
+			}
+			f_changeTimer=0;
+		}
+		f_alpha+=bb_random.bb_random_Rnd2(-0.1f,0.1f);
+		f_alpha=bb_math.bb_math_Clamp2(f_alpha,0.5f,1.0f);
 	}
 	public virtual void m_Render(){
+		bb_graphics.bb_graphics_SetAlpha(f_alpha);
+		bb_gfx_GFX.g_Draw(f_X,f_Y,0+f_Frame*16,16,1,1);
 	}
 }
 class bb_list_List3 : Object{
@@ -2712,8 +2788,8 @@ class bb_list_List3 : Object{
 		}
 		return this;
 	}
-	public virtual bb_list_Enumerator3 m_ObjectEnumerator(){
-		return (new bb_list_Enumerator3()).g_Enumerator_new(this);
+	public virtual bb_list_Enumerator4 m_ObjectEnumerator(){
+		return (new bb_list_Enumerator4()).g_Enumerator_new(this);
 	}
 }
 class bb_list_Node3 : Object{
@@ -2741,9 +2817,26 @@ class bb_list_HeadNode3 : bb_list_Node3{
 	}
 }
 class bb_snowman_Snowman : Object{
+	public bb_scene_Scene f_scene=null;
+	public virtual bb_snowman_Snowman g_Snowman_new(bb_scene_Scene t_tS){
+		f_scene=t_tS;
+		return this;
+	}
+	public virtual bb_snowman_Snowman g_Snowman_new2(){
+		return this;
+	}
+	public bb_snowmanhead_SnowmanHead f_head=null;
+	public bb_snowmanbody_SnowmanBody f_body=null;
+	public virtual int m_SetPos2(float t_tX,float t_tY){
+		f_head.m_SetPos2(t_tX,t_tY-24.0f);
+		f_body.m_SetPos2(t_tX,t_tY-12.0f);
+		return 0;
+	}
 	public virtual void m_Update(){
 	}
 	public virtual void m_Render(){
+		f_body.m_Render();
+		f_head.m_Render();
 	}
 }
 class bb_list_List4 : Object{
@@ -2764,8 +2857,8 @@ class bb_list_List4 : Object{
 		}
 		return this;
 	}
-	public virtual bb_list_Enumerator4 m_ObjectEnumerator(){
-		return (new bb_list_Enumerator4()).g_Enumerator_new(this);
+	public virtual bb_list_Enumerator5 m_ObjectEnumerator(){
+		return (new bb_list_Enumerator5()).g_Enumerator_new(this);
 	}
 }
 class bb_list_Node4 : Object{
@@ -2801,7 +2894,7 @@ class bb_snowflake_Snowflake : Object{
 	public virtual void m_Update(){
 		f_X+=f_XS;
 		f_Y+=f_YS;
-		f_XS+=bb_random.bb_random_Rnd2(-0.5f,0.5f);
+		f_XS+=bb_random.bb_random_Rnd2(-0.1f,0.1f);
 		f_YS+=bb_random.bb_random_Rnd2(-0.1f,0.1f);
 		if(f_YS<0.0f){
 			f_YS=0.0f;
@@ -2841,8 +2934,8 @@ class bb_list_List5 : Object{
 		}
 		return this;
 	}
-	public virtual bb_list_Enumerator5 m_ObjectEnumerator(){
-		return (new bb_list_Enumerator5()).g_Enumerator_new(this);
+	public virtual bb_list_Enumerator6 m_ObjectEnumerator(){
+		return (new bb_list_Enumerator6()).g_Enumerator_new(this);
 	}
 	public virtual bool m_Equals(bb_snowflake_Snowflake t_lhs,bb_snowflake_Snowflake t_rhs){
 		return t_lhs==t_rhs;
@@ -2910,7 +3003,130 @@ class bb_moon_Moon : Object{
 		f_Frame=(float)(t_tF);
 	}
 	public virtual void m_Render(){
-		bb_gfx_GFX.g_Draw((int)(f_X),(int)(f_Y),(int)(0.0f+f_Frame*32.0f),0,32,32);
+		bb_gfx_GFX.g_Draw((int)(f_X),(int)(f_Y),(int)(0.0f+f_Frame*32.0f),208,32,32);
+	}
+}
+class bb_treelight_TreeLight : Object{
+	public bb_tree_Tree f_tree=null;
+	public bb_scene_Scene f_scene=null;
+	public virtual bb_treelight_TreeLight g_TreeLight_new(bb_tree_Tree t_tT){
+		f_tree=t_tT;
+		f_scene=t_tT.f_scene;
+		return this;
+	}
+	public virtual bb_treelight_TreeLight g_TreeLight_new2(){
+		return this;
+	}
+	public int f_Frame=0;
+	public float f_X=.0f;
+	public float f_Y=.0f;
+	public virtual void m_SetPos2(float t_tX,float t_tY){
+		f_X=t_tX;
+		f_Y=t_tY;
+	}
+	public bool f_Bright=false;
+	public virtual void m_Blink(){
+		f_Bright=!f_Bright;
+	}
+	public virtual void m_Render(){
+		if(f_Bright){
+			bb_graphics.bb_graphics_SetAlpha(1.0f);
+		}else{
+			bb_graphics.bb_graphics_SetAlpha(0.2f);
+		}
+		bb_gfx_GFX.g_Draw((int)(f_X),(int)(f_Y),0+f_Frame*16,64,3,3);
+	}
+}
+class bb_list_List6 : Object{
+	public virtual bb_list_List6 g_List_new(){
+		return this;
+	}
+	public bb_list_Node6 f__head=((new bb_list_HeadNode6()).g_HeadNode_new());
+	public virtual bb_list_Node6 m_AddLast6(bb_treelight_TreeLight t_data){
+		return (new bb_list_Node6()).g_Node_new(f__head,f__head.f__pred,t_data);
+	}
+	public virtual bb_list_List6 g_List_new2(bb_treelight_TreeLight[] t_data){
+		bb_treelight_TreeLight[] t_=t_data;
+		int t_2=0;
+		while(t_2<bb_std_lang.length(t_)){
+			bb_treelight_TreeLight t_t=t_[t_2];
+			t_2=t_2+1;
+			m_AddLast6(t_t);
+		}
+		return this;
+	}
+	public virtual bb_list_Enumerator2 m_ObjectEnumerator(){
+		return (new bb_list_Enumerator2()).g_Enumerator_new(this);
+	}
+}
+class bb_list_Node6 : Object{
+	public bb_list_Node6 f__succ=null;
+	public bb_list_Node6 f__pred=null;
+	public bb_treelight_TreeLight f__data=null;
+	public virtual bb_list_Node6 g_Node_new(bb_list_Node6 t_succ,bb_list_Node6 t_pred,bb_treelight_TreeLight t_data){
+		f__succ=t_succ;
+		f__pred=t_pred;
+		f__succ.f__pred=this;
+		f__pred.f__succ=this;
+		f__data=t_data;
+		return this;
+	}
+	public virtual bb_list_Node6 g_Node_new2(){
+		return this;
+	}
+}
+class bb_list_HeadNode6 : bb_list_Node6{
+	public virtual bb_list_HeadNode6 g_HeadNode_new(){
+		base.g_Node_new2();
+		f__succ=(this);
+		f__pred=(this);
+		return this;
+	}
+}
+class bb_snowmanhead_SnowmanHead : Object{
+	public bb_snowman_Snowman f_snowman=null;
+	public bb_scene_Scene f_scene=null;
+	public int f_Frame=0;
+	public virtual bb_snowmanhead_SnowmanHead g_SnowmanHead_new(bb_snowman_Snowman t_tSnowman){
+		f_snowman=t_tSnowman;
+		f_scene=t_tSnowman.f_scene;
+		f_Frame=0;
+		return this;
+	}
+	public virtual bb_snowmanhead_SnowmanHead g_SnowmanHead_new2(){
+		return this;
+	}
+	public float f_X=.0f;
+	public float f_Y=.0f;
+	public virtual void m_SetPos2(float t_tX,float t_tY){
+		f_X=t_tX;
+		f_Y=t_tY;
+	}
+	public virtual void m_Render(){
+		bb_gfx_GFX.g_Draw((int)(f_X),(int)(f_Y),0+f_Frame*16,32,16,16);
+	}
+}
+class bb_snowmanbody_SnowmanBody : Object{
+	public bb_snowman_Snowman f_snowman=null;
+	public bb_scene_Scene f_scene=null;
+	public int f_Frame=0;
+	public virtual bb_snowmanbody_SnowmanBody g_SnowmanBody_new(bb_snowman_Snowman t_tSnowman){
+		f_snowman=t_tSnowman;
+		f_scene=t_tSnowman.f_scene;
+		f_Frame=0;
+		return this;
+	}
+	public virtual bb_snowmanbody_SnowmanBody g_SnowmanBody_new2(){
+		return this;
+	}
+	public float f_X=.0f;
+	public float f_Y=.0f;
+	public virtual void m_SetPos2(float t_tX,float t_tY){
+		f_X=t_tX;
+		f_Y=t_tY;
+	}
+	public virtual void m_Render(){
+		bb_gfx_GFX.g_Draw((int)(f_X),(int)(f_Y),0+f_Frame*16,48,16,16);
 	}
 }
 class bb_list_Enumerator : Object{
@@ -2937,14 +3153,37 @@ class bb_list_Enumerator : Object{
 	}
 }
 class bb_list_Enumerator2 : Object{
-	public bb_list_List2 f__list=null;
-	public bb_list_Node2 f__curr=null;
-	public virtual bb_list_Enumerator2 g_Enumerator_new(bb_list_List2 t_list){
+	public bb_list_List6 f__list=null;
+	public bb_list_Node6 f__curr=null;
+	public virtual bb_list_Enumerator2 g_Enumerator_new(bb_list_List6 t_list){
 		f__list=t_list;
 		f__curr=t_list.f__head.f__succ;
 		return this;
 	}
 	public virtual bb_list_Enumerator2 g_Enumerator_new2(){
+		return this;
+	}
+	public virtual bool m_HasNext(){
+		while(f__curr.f__succ.f__pred!=f__curr){
+			f__curr=f__curr.f__succ;
+		}
+		return f__curr!=f__list.f__head;
+	}
+	public virtual bb_treelight_TreeLight m_NextObject(){
+		bb_treelight_TreeLight t_data=f__curr.f__data;
+		f__curr=f__curr.f__succ;
+		return t_data;
+	}
+}
+class bb_list_Enumerator3 : Object{
+	public bb_list_List2 f__list=null;
+	public bb_list_Node2 f__curr=null;
+	public virtual bb_list_Enumerator3 g_Enumerator_new(bb_list_List2 t_list){
+		f__list=t_list;
+		f__curr=t_list.f__head.f__succ;
+		return this;
+	}
+	public virtual bb_list_Enumerator3 g_Enumerator_new2(){
 		return this;
 	}
 	public virtual bool m_HasNext(){
@@ -2959,15 +3198,15 @@ class bb_list_Enumerator2 : Object{
 		return t_data;
 	}
 }
-class bb_list_Enumerator3 : Object{
+class bb_list_Enumerator4 : Object{
 	public bb_list_List3 f__list=null;
 	public bb_list_Node3 f__curr=null;
-	public virtual bb_list_Enumerator3 g_Enumerator_new(bb_list_List3 t_list){
+	public virtual bb_list_Enumerator4 g_Enumerator_new(bb_list_List3 t_list){
 		f__list=t_list;
 		f__curr=t_list.f__head.f__succ;
 		return this;
 	}
-	public virtual bb_list_Enumerator3 g_Enumerator_new2(){
+	public virtual bb_list_Enumerator4 g_Enumerator_new2(){
 		return this;
 	}
 	public virtual bool m_HasNext(){
@@ -2982,15 +3221,15 @@ class bb_list_Enumerator3 : Object{
 		return t_data;
 	}
 }
-class bb_list_Enumerator4 : Object{
+class bb_list_Enumerator5 : Object{
 	public bb_list_List4 f__list=null;
 	public bb_list_Node4 f__curr=null;
-	public virtual bb_list_Enumerator4 g_Enumerator_new(bb_list_List4 t_list){
+	public virtual bb_list_Enumerator5 g_Enumerator_new(bb_list_List4 t_list){
 		f__list=t_list;
 		f__curr=t_list.f__head.f__succ;
 		return this;
 	}
-	public virtual bb_list_Enumerator4 g_Enumerator_new2(){
+	public virtual bb_list_Enumerator5 g_Enumerator_new2(){
 		return this;
 	}
 	public virtual bool m_HasNext(){
@@ -3005,15 +3244,15 @@ class bb_list_Enumerator4 : Object{
 		return t_data;
 	}
 }
-class bb_list_Enumerator5 : Object{
+class bb_list_Enumerator6 : Object{
 	public bb_list_List5 f__list=null;
 	public bb_list_Node5 f__curr=null;
-	public virtual bb_list_Enumerator5 g_Enumerator_new(bb_list_List5 t_list){
+	public virtual bb_list_Enumerator6 g_Enumerator_new(bb_list_List5 t_list){
 		f__list=t_list;
 		f__curr=t_list.f__head.f__succ;
 		return this;
 	}
-	public virtual bb_list_Enumerator5 g_Enumerator_new2(){
+	public virtual bb_list_Enumerator6 g_Enumerator_new2(){
 		return this;
 	}
 	public virtual bool m_HasNext(){
@@ -3046,6 +3285,8 @@ class bb_gfx{
 }
 class bb_house{
 }
+class bb_housedoor{
+}
 class bb_houselight{
 }
 class bb_moon{
@@ -3053,15 +3294,31 @@ class bb_moon{
 class bb_scene{
 	public static bb_scene_Scene bb_scene_GenerateScene(){
 		bb_scene_Scene t_tS=(new bb_scene_Scene()).g_Scene_new();
-		float t_sY=bb_random.bb_random_Rnd2((float)(bb_scene_Scene.g_Height)*0.66f,(float)(bb_scene_Scene.g_Height)*0.9f);
-		float t_fY=t_sY;
-		float t_maxFlux=bb_random.bb_random_Rnd2(5.0f,10.0f);
+		t_tS.f_FloorStartY=bb_random.bb_random_Rnd2((float)(bb_scene_Scene.g_Height-64),(float)(bb_scene_Scene.g_Height)*0.9f);
+		float t_fY=t_tS.f_FloorStartY;
+		t_tS.f_FloorHFlux=bb_random.bb_random_Rnd2(1.0f,2.0f);
+		t_tS.f_FloorVFlux=bb_random.bb_random_Rnd2(5.0f,10.0f);
 		for(int t_i=0;t_i<t_tS.f_FloorSegmentCount;t_i=t_i+1){
 			int t_fX=t_i*bb_floorsegment_FloorSegment.g_Width;
 			t_tS.f_FloorSegments[t_i].m_SetPos(t_fX,(int)(t_fY));
-			t_fY=t_sY+(float)Math.Sin(((float)(t_fX))*bb_std_lang.D2R)*t_maxFlux;
+			t_fY=t_tS.f_FloorStartY+(float)Math.Sin(((float)(t_fX)*t_tS.f_FloorHFlux)*bb_std_lang.D2R)*t_tS.f_FloorVFlux;
 		}
-		t_tS.f_moon.m_Set(bb_random.bb_random_Rnd2(-32.0f,(float)(bb_scene_Scene.g_Width-32)),bb_random.bb_random_Rnd2(-32.0f,(float)(bb_scene_Scene.g_Height)*0.33f),(int)(bb_random.bb_random_Rnd2(0.0f,6.0f)));
+		t_tS.f_moon.m_Set(bb_random.bb_random_Rnd2(-32.0f,(float)(bb_scene_Scene.g_Width-32)),bb_random.bb_random_Rnd2(-32.0f,(float)(bb_scene_Scene.g_Height)*0.33f),(int)(bb_random.bb_random_Rnd2(0.0f,4.0f)));
+		int t_tSC=(int)(bb_random.bb_random_Rnd2(20.0f,80.0f));
+		for(int t_i2=0;t_i2<t_tSC;t_i2=t_i2+1){
+			bb_star_Star t_tStar=(new bb_star_Star()).g_Star_new(t_tS);
+			t_tStar.m_SetPos2(bb_random.bb_random_Rnd2(0.0f,(float)(bb_scene_Scene.g_Width)),bb_random.bb_random_Rnd2(0.0f,(float)(bb_scene_Scene.g_Height)));
+			t_tStar.f_alpha=bb_random.bb_random_Rnd2(0.5f,1.0f);
+			t_tS.f_Stars.m_AddLast3(t_tStar);
+		}
+		t_tSC=(int)(bb_random.bb_random_Rnd2(0.0f,4.0f));
+		for(int t_i3=0;t_i3<t_tSC;t_i3=t_i3+1){
+			t_tS.f_Trees.m_AddLast(bb_tree.bb_tree_GenerateTree(t_tS));
+		}
+		t_tSC=(int)(bb_random.bb_random_Rnd2(0.0f,4.0f));
+		for(int t_i4=0;t_i4<t_tSC;t_i4=t_i4+1){
+			t_tS.f_Snowmen.m_AddLast4(bb_snowman.bb_snowman_GenerateSnowman(t_tS));
+		}
 		return t_tS;
 	}
 }
@@ -3070,12 +3327,47 @@ class bb_sfx{
 class bb_snowflake{
 }
 class bb_snowman{
+	public static bb_snowman_Snowman bb_snowman_GenerateSnowman(bb_scene_Scene t_tScene){
+		bb_snowman_Snowman t_tS=(new bb_snowman_Snowman()).g_Snowman_new(t_tScene);
+		t_tS.f_head=(new bb_snowmanhead_SnowmanHead()).g_SnowmanHead_new(t_tS);
+		t_tS.f_body=(new bb_snowmanbody_SnowmanBody()).g_SnowmanBody_new(t_tS);
+		t_tS.f_head.f_Frame=(int)(bb_random.bb_random_Rnd2(0.0f,4.0f));
+		t_tS.f_body.f_Frame=(int)(bb_random.bb_random_Rnd2(0.0f,4.0f));
+		float t_tX=bb_random.bb_random_Rnd2(-8.0f,(float)(bb_scene_Scene.g_Width-8));
+		float t_tY=t_tScene.m_GetFloorYAtX(t_tX);
+		t_tS.m_SetPos2(t_tX,t_tY);
+		return t_tS;
+	}
+}
+class bb_snowmanbody{
+}
+class bb_snowmanhead{
 }
 class bb_star{
 }
 class bb_tree{
+	public static bb_tree_Tree bb_tree_GenerateTree(bb_scene_Scene t_tScene){
+		bb_tree_Tree t_tT=(new bb_tree_Tree()).g_Tree_new(t_tScene);
+		float t_tX=bb_random.bb_random_Rnd2(-8.0f,(float)(bb_scene_Scene.g_Width-8));
+		float t_tY=t_tScene.m_GetFloorYAtX(t_tX)-32.0f;
+		t_tT.f_Frame=(int)(bb_random.bb_random_Rnd2(0.0f,2.0f));
+		t_tT.m_SetPos2(t_tX,t_tY);
+		t_tT.f_BlinkRate=(int)(bb_random.bb_random_Rnd2(3.0f,20.0f));
+		int t_tLC=(int)(bb_random.bb_random_Rnd2(5.0f,10.0f));
+		for(int t_i=0;t_i<t_tLC;t_i=t_i+1){
+			bb_treelight_TreeLight t_tL=bb_treelight.bb_treelight_GenerateTreeLight(t_tT);
+			t_tL.m_SetPos2(bb_random.bb_random_Rnd2(t_tX+4.0f,t_tX+12.0f),bb_random.bb_random_Rnd2(t_tY+8.0f,t_tY+24.0f));
+			t_tT.f_Lights.m_AddLast6(t_tL);
+		}
+		return t_tT;
+	}
 }
 class bb_treelight{
+	public static bb_treelight_TreeLight bb_treelight_GenerateTreeLight(bb_tree_Tree t_tT){
+		bb_treelight_TreeLight t_tL=(new bb_treelight_TreeLight()).g_TreeLight_new(t_tT);
+		t_tL.f_Frame=(int)(bb_random.bb_random_Rnd2(0.0f,4.0f));
+		return t_tL;
+	}
 }
 class bb_{
 	public static int bbMain(){
@@ -3126,6 +3418,9 @@ class bb_audio{
 	public static int bb_audio_SetAudioDevice(gxtkAudio t_dev){
 		bb_audio.bb_audio_device=t_dev;
 		return 0;
+	}
+	public static int bb_audio_PlayMusic(String t_path,int t_flags){
+		return bb_audio.bb_audio_device.PlayMusic(bb_data.bb_data_FixDataPath(t_path),t_flags);
 	}
 }
 class bb_audiodevice{
@@ -3359,6 +3654,9 @@ class bb_input{
 		bb_input.bb_input_device=t_dev;
 		return 0;
 	}
+	public static int bb_input_KeyHit(int t_key){
+		return bb_input.bb_input_device.KeyHit(t_key);
+	}
 }
 class bb_inputdevice{
 }
@@ -3373,6 +3671,24 @@ class bb_list{
 class bb_map{
 }
 class bb_math{
+	public static int bb_math_Clamp(int t_n,int t_min,int t_max){
+		if(t_n<t_min){
+			return t_min;
+		}
+		if(t_n>t_max){
+			return t_max;
+		}
+		return t_n;
+	}
+	public static float bb_math_Clamp2(float t_n,float t_min,float t_max){
+		if(t_n<t_min){
+			return t_min;
+		}
+		if(t_n>t_max){
+			return t_max;
+		}
+		return t_n;
+	}
 	public static int bb_math_Max(int t_x,int t_y){
 		if(t_x>t_y){
 			return t_x;

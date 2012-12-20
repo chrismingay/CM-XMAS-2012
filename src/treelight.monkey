@@ -18,7 +18,7 @@ Class TreeLight
 	
 	Field Bright:Bool
 	
-	Const FRAME_COUNT:Int = 4
+	Const FRAME_COUNT:Int = 6
 	Field Frame:Int
 	
 	Method New(tT:Tree)

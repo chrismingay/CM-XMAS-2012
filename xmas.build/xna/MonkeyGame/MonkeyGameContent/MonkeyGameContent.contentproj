@@ -61,6 +61,13 @@
 	   </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="monkey\mus\sleigh.mp3">
+      <Name>sleigh.mp3</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+	   </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="monkey\mojo_font.png">
       <Name>mojo_font.png</Name>
       <Importer>TextureImporter</Importer>

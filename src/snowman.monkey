@@ -5,6 +5,9 @@ Class Snowman
 	Field X:Float
 	Field Y:Float
 	
+	Const WIDTH:Int = 16
+	Const HEIGHT:Int = 32
+	
 	Field scene:Scene
 	Field head:SnowmanHead
 	Field body:SnowmanBody 
@@ -23,7 +26,7 @@ Class Snowman
 	End
 	
 	Method SetPos(tX:Float,tY:Float)
-		head.SetPos(tX,tY-24)
+		head.SetPos(tX, tY - 26)
 		body.SetPos(tX,tY - 12)
 	End
 
@@ -33,11 +36,18 @@ Function GenerateSnowman:Snowman(tScene:Scene)
 	Local tS:Snowman = New Snowman(tScene)
 	tS.head = New SnowmanHead(tS)
 	tS.body = New SnowmanBody(tS)
-	tS.head.Frame = Rnd(0.0,SnowmanHead.FRAME_COUNT)
-	tS.body.Frame = Rnd(0.0,SnowmanBody.FRAME_COUNT)
+	tS.head.Frame = 0 ' Rnd(0.0,SnowmanHead.FRAME_COUNT)
+	tS.body.Frame = 0 ' Rnd(0.0,SnowmanBody.FRAME_COUNT)
 	
-	Local tX:Float = Rnd(0 - 8, tScene.Width - 8)
-	Local tY:Float = tScene.GetFloorYAtX(tX)
+	Local posGood = False
+	Local tX:Float
+	Local tY:Float
+	While posGood = False
+		tX = Rnd(0 - 8, tScene.Width - 8)
+		tY = tScene.GetFloorYAtX(tX)
+		
+		posGood = tScene.CheckRectAgainstScene(tX, tY, Snowman.WIDTH, Snowman.HEIGHT)
+	Wend
 	
 	tS.SetPos(tX,tY)
 	

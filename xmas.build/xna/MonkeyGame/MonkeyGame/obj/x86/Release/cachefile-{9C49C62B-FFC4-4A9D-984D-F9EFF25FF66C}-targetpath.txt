@@ -1,0 +1,5 @@
+Content\monkey\gfx\xmas_scene.png.xnb
+Content\monkey\gfx\xmas_sprites.png.xnb
+Content\monkey\mojo_font.png.xnb
+Content\monkey\mus\sleigh.mp3.xnb
+Content\monkey\mus\sleigh.mp3.wma

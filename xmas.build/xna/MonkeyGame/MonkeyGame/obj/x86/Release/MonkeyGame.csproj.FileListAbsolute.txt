@@ -1,0 +1,2 @@
+C:\Users\Chris\Documents\GitHub\CM-XMAS-2012\xmas.build\xna\MonkeyGame\MonkeyGame\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Chris\Documents\GitHub\CM-XMAS-2012\xmas.build\xna\MonkeyGame\MonkeyGame\obj\x86\Release\Microsoft.Xna.Framework.RuntimeProfile.txt

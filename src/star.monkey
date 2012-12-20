@@ -33,7 +33,8 @@ Class Star
 		Endif
 		
 		alpha += Rnd(-0.1,0.1)
-		alpha = Clamp(alpha,0.5,1.0)
+		alpha = Clamp(alpha, 0.5, 1.0)
+		
 	End
 	
 	Method SetPos(tX:Float,tY:Float)
@@ -42,7 +43,13 @@ Class Star
 	End
 	
 	Method Render:Void()
-		SetAlpha(alpha)
+		Local tA:Float = alpha
+		If Y < Scene.Height * 0.5
+			tA = alpha
+		Else
+			tA = alpha * (1.0 - ( (Y - Scene.Height * 0.5) / (Scene.Height * 0.5))) * 0.75
+		EndIf
+		SetAlpha(tA)
 		GFX.Draw(X,Y,DRAW_X + (Frame * 16), DRAW_Y,WIDTH,HEIGHT)
 	End
 

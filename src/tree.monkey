@@ -55,19 +55,47 @@ Function GenerateTree:Tree(tScene:Scene)
 
 	Local tT:Tree = New Tree(tScene)
 	
-	Local tX:Float = Rnd(0 - 8, tScene.Width - 8)
-	Local tY:Float = tScene.GetFloorYAtX(tX) - 32
+	Local posGood:Bool = False
 	
-	tT.Frame = Rnd(0.0,Tree.FRAME_COUNT)
+	Local tX:Float
+	Local tY:Float
+	While posGood = False
+		tX = Rnd(0 - 8, tScene.Width - 8)
+		tY = tScene.GetFloorYAtX(tX) - 32
+		
+		posGood = tScene.CheckRectAgainstScene(tX, tY, Tree.WIDTH, Tree.HEIGHT)
+	Wend
+	
+	tT.Frame = Rnd(0.0, Tree.FRAME_COUNT)
 	
 	tT.SetPos(tX,tY)
 	
 	tT.BlinkRate = Rnd(3,20)
 	
-	Local tLC:Int = Rnd(5,10)
+	Local tLC:Int = Rnd(10, 15)
 	For Local i:Int = 0 Until tLC
 		Local tL:TreeLight = GenerateTreeLight(tT)
-		tL.SetPos(Rnd(tX + 4,tX+12),Rnd(tY + 8,tY+24))
+		
+		Local good:Bool = False
+		Local lX:Float
+		Local lY:Float
+		While good = False
+			lX = Rnd(-2, 14)
+			lY = Rnd(0, 24)
+			
+			If lY > 16
+				good = True
+			Else
+				Local dX:Float = Abs(8 - lX)
+				
+				If dX * 1.5 <= (lY + 1)
+					good = True
+				EndIf
+			EndIf
+			
+		Wend
+		
+		tL.SetPos(tX + lX, tY + lY)
 		tT.Lights.AddLast(tL)
 	Next
 	
