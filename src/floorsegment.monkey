@@ -18,7 +18,7 @@ Class FloorSegment
 	End
 	
 	Method Render:Void()
-		GFX.Draw(X,Y,0,96,Width,64)
+		GFX.Draw(X,Y,0,96,Width,100)
 	End
 	
 End

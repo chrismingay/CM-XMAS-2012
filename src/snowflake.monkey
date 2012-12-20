@@ -2,6 +2,9 @@ Import xmas
 
 Class Snowflake
 
+	Const DRAW_X:Int = 0
+	Const DRAW_Y:Int = 0
+
 	Const WIDTH:Int = 16
 	Const HEIGHT:Int = 16
 	
@@ -24,7 +27,7 @@ Class Snowflake
 		X += XS
 		Y += YS
 		
-		XS += Rnd(-0.5,0.5)
+		XS += Rnd(-0.1,0.1)
 		YS += Rnd(-0.1,0.1)
 		If YS < 0
 			YS = 0
@@ -37,7 +40,7 @@ Class Snowflake
 	End
 	
 	Method Render:Void()
-		GFX.Draw(X,Y,0 + (Frame * WIDTH),0,WIDTH,HEIGHT)
+		GFX.Draw(X,Y,DRAW_X + (Frame * WIDTH),DRAW_Y,WIDTH,HEIGHT)
 	End
 	
 End

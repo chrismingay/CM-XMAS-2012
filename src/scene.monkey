@@ -18,6 +18,9 @@ Class Scene
 	Field Snowmen:List<Snowman>
 	Field Snowflakes:List<Snowflake>
 	
+	Field FloorStartY:FLoat
+	Field FloorVFlux:Float
+	Field FloorHFlux:FLoat
 	Field FloorSegmentCount:Int
 	Field FloorSegments:FloorSegment[]
 	
@@ -72,15 +75,19 @@ Class Scene
 		SetAlpha(1)
 		DrawImage(Background,0,0)
 		
-		For Local tStar:Star = EachIn Stars
+		For Local tStar:Star = Eachin Stars
 			tStar.Render()
 		Next
+		
+		SetAlpha(1)
 		
 		moon.Render()
 		
 		For Local tTree:Tree = Eachin Trees
 			tTree.Render()
 		Next
+		
+		SetAlpha(1)
 		
 		For Local tHouse:House = Eachin Houses
 			tHouse.Render()
@@ -109,12 +116,16 @@ Class Scene
 			tS.Y = -10
 		End
 		
-		tS.Frame = Rnd(0.0,10.0)
+		tS.Frame = Rnd(0.0,7.0)
 			
-		tS.XS = Rnd(-2,4)
+		tS.XS = Rnd(-1,2)
 		tS.YS = Rnd(0.1,1.0)
 		
 		Snowflakes.AddLast(tS)
+	End
+	
+	Method GetFloorYAtX:Float(tX:Float)
+		Return FloorStartY + Sin(tX * FloorHFlux) * FloorVFlux
 	End
 	
 End
@@ -123,28 +134,42 @@ Function GenerateScene:Scene()
 	Local tS:Scene = New Scene()
 	
 	' Set floor
-	Local sY:Float = Rnd(Scene.Height * 0.66,Scene.Height * 0.9)
-	Local fY:Float = sY
-	Local maxFlux:Float = Rnd(5,30)
+	tS.FloorStartY = Rnd(Scene.Height  - 64,Scene.Height * 0.9)
+	Local fY:Float = tS.FloorStartY
+	tS.FloorHFlux = Rnd(1.0,2.0)
+	tS.FloorVFlux = Rnd(5,10)
 	For Local i:Int = 0 Until tS.FloorSegmentCount
 		Local fX:Int = (i * FloorSegment.Width)
 		tS.FloorSegments[i].SetPos(fX,fY)
-		fY = sY + Sin(fX) * maxFlux
+		fY = tS.FloorStartY + Sin(fX * tS.FloorHFlux) * tS.FloorVFlux
 	Next
 	
 	' Set the moon
-	tS.moon.Set(Rnd(-32,Scene.Width - 32),Rnd(-32,Scene.Height * 0.33),Rnd(0.0,6.0))
+	tS.moon.Set(Rnd(-32,Scene.Width - 32),Rnd(-32,Scene.Height * 0.33),Rnd(0.0,4.0))
+	
+	' Set the stars
+	Local tSC:Int = Rnd(20,80)
+	For Local i:Int = 0 Until tSC
+		Local tStar:Star = New Star(tS)
+		tStar.SetPos(Rnd(0,Scene.Width),Rnd(0,Scene.Height))
+		tStar.alpha = Rnd(0.5,1.0)
+		tS.Stars.AddLast(tStar)
+	Next
+	
 	
 	' Trees
+	tSC = Rnd(0,4)
+	For Local i:Int = 0 Until tSC
+		tS.Trees.AddLast(GenerateTree(tS))
+	Next
 	
 	' Houses
 	
 	' Snowmen
-	
-	
-	
-	
-	
+	tSC = Rnd(0,4)
+	For Local i:Int = 0 Until tSC
+		tS.Snowmen.AddLast(GenerateSnowman(tS))
+	Next
 	
 	Return tS
 End

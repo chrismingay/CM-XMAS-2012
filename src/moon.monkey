@@ -19,7 +19,7 @@ Class Moon
 	End
 	
 	Method Render:Void()
-		GFX.Draw(X,Y,0 + (Frame * 32), 0, 32, 32)
+		GFX.Draw(X,Y,0 + (Frame * 32), 208, 32, 32)
 	End
 	
 End

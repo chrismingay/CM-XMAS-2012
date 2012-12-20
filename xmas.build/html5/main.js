@@ -63,7 +63,7 @@ CFG_TRANSDIR="";
 //${CONFIG_END}
 
 //${METADATA_BEGIN}
-var META_DATA="[gfx/background.png];type=image/png;width=320;height=240;\n[gfx/xmas_sprites.png];type=image/png;width=512;height=512;\n[mojo_font.png];type=image/png;width=864;height=13;\n";
+var META_DATA="[gfx/xmas_scene.png];type=image/png;width=360;height=240;\n[gfx/xmas_sprites.png];type=image/png;width=512;height=512;\n[mojo_font.png];type=image/png;width=864;height=13;\n";
 //${METADATA_END}
 
 function getMetaData( path,key ){
@@ -1727,49 +1727,45 @@ function bb_xmas_XmasApp(){
 bb_xmas_XmasApp.prototype=extend_class(bb_app_App);
 function bb_xmas_XmasApp_new(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<27>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<30>";
 	bb_app_App_new.call(this);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<27>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<30>";
 	pop_err();
 	return this;
 }
 bb_xmas_XmasApp.prototype.m_OnCreate=function(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<33>";
-	bb_app_SetUpdateRate(30);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<34>";
-	bb_random_Seed=systemMillisecs();
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<36>";
-	bb_gfx_GFX_Init();
+	bb_app_SetUpdateRate(30);
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<37>";
-	bb_scene_Scene_Init();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<38>";
-	bb_sfx_SFX_Init();
+	bb_random_Seed=systemMillisecs();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<39>";
+	bb_gfx_GFX_Init();
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<40>";
-	bb_autofit_SetVirtualDisplay(360,240,1.0);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<42>";
+	bb_scene_Scene_Init();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<41>";
+	bb_sfx_SFX_Init();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<45>";
 	this.f_scene=bb_scene_GenerateScene();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<44>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<47>";
 	pop_err();
 	return 1;
 }
 bb_xmas_XmasApp.prototype.m_OnUpdate=function(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<49>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<52>";
 	this.f_scene.m_Update();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<51>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<54>";
 	pop_err();
 	return 1;
 }
 bb_xmas_XmasApp.prototype.m_OnRender=function(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<56>";
-	bb_autofit_UpdateVirtualDisplay(true,true);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<58>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<61>";
 	bb_graphics_Cls(0.0,0.0,0.0);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<60>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<63>";
 	this.f_scene.m_Render();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<62>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<65>";
 	pop_err();
 	return 1;
 }
@@ -1888,9 +1884,9 @@ function bb_audio_SetAudioDevice(t_dev){
 var bb_app_device;
 function bbMain(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<68>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<71>";
 	bb_xmas_XmasApp_new.call(new bb_xmas_XmasApp);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<69>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/xmas.monkey<72>";
 	pop_err();
 	return 0;
 }
@@ -2342,190 +2338,204 @@ function bb_scene_Scene(){
 	this.f_Snowmen=null;
 	this.f_Snowflakes=null;
 	this.f_moon=null;
+	this.f_FloorStartY=.0;
+	this.f_FloorHFlux=.0;
+	this.f_FloorVFlux=.0;
 }
 var bb_scene_Scene_Background;
 function bb_scene_Scene_Init(){
 	push_err();
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<12>";
-	bb_scene_Scene_Background=bb_graphics_LoadImage("gfx/background.png",1,bb_graphics_Image_DefaultFlags);
+	bb_scene_Scene_Background=bb_graphics_LoadImage("gfx/xmas_scene.png",1,bb_graphics_Image_DefaultFlags);
 	pop_err();
 }
 var bb_scene_Scene_Width;
 function bb_scene_Scene_new(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<28>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<31>";
 	this.f_FloorSegmentCount=((bb_scene_Scene_Width/bb_floorsegment_FloorSegment_Width)|0)+1;
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<29>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<32>";
 	this.f_FloorSegments=new_object_array(this.f_FloorSegmentCount);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<30>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<33>";
 	for(var t_i=0;t_i<this.f_FloorSegmentCount;t_i=t_i+1){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<31>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<34>";
 		dbg_array(this.f_FloorSegments,t_i)[dbg_index]=bb_floorsegment_FloorSegment_new.call(new bb_floorsegment_FloorSegment,this)
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<34>";
-	this.f_Trees=bb_list_List_new.call(new bb_list_List);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<35>";
-	this.f_Houses=bb_list_List2_new.call(new bb_list_List2);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<36>";
-	this.f_Stars=bb_list_List3_new.call(new bb_list_List3);
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<37>";
-	this.f_Snowmen=bb_list_List4_new.call(new bb_list_List4);
+	this.f_Trees=bb_list_List_new.call(new bb_list_List);
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<38>";
-	this.f_Snowflakes=bb_list_List5_new.call(new bb_list_List5);
+	this.f_Houses=bb_list_List2_new.call(new bb_list_List2);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<39>";
+	this.f_Stars=bb_list_List3_new.call(new bb_list_List3);
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<40>";
+	this.f_Snowmen=bb_list_List4_new.call(new bb_list_List4);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<41>";
+	this.f_Snowflakes=bb_list_List5_new.call(new bb_list_List5);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<43>";
 	this.f_moon=bb_moon_Moon_new.call(new bb_moon_Moon,this);
 	pop_err();
 	return this;
 }
 var bb_scene_Scene_Height;
+bb_scene_Scene.prototype.m_GetFloorYAtX=function(t_tX){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<128>";
+	var t_=this.f_FloorStartY+Math.sin((t_tX*this.f_FloorHFlux)*D2R)*this.f_FloorVFlux;
+	pop_err();
+	return t_;
+}
 bb_scene_Scene.prototype.m_AddSnowFlake=function(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<103>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<110>";
 	var t_tS=bb_snowflake_Snowflake_new.call(new bb_snowflake_Snowflake,this);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<104>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<111>";
 	if(bb_random_Rnd()<0.5){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<105>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<112>";
 		dbg_object(t_tS).f_X=-10.0;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<106>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<113>";
 		dbg_object(t_tS).f_Y=bb_random_Rnd2(-5.0,(bb_scene_Scene_Height-5));
 	}else{
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<108>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<115>";
 		dbg_object(t_tS).f_X=bb_random_Rnd2(-5.0,(bb_scene_Scene_Width-5));
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<109>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<116>";
 		dbg_object(t_tS).f_Y=-10.0;
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<112>";
-	dbg_object(t_tS).f_Frame=((bb_random_Rnd2(0.0,10.0))|0);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<114>";
-	dbg_object(t_tS).f_XS=bb_random_Rnd2(-2.0,4.0);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<115>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<119>";
+	dbg_object(t_tS).f_Frame=((bb_random_Rnd2(0.0,7.0))|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<121>";
+	dbg_object(t_tS).f_XS=bb_random_Rnd2(-1.0,2.0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<122>";
 	dbg_object(t_tS).f_YS=bb_random_Rnd2(0.1,1.0);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<117>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<124>";
 	this.f_Snowflakes.m_AddLast5(t_tS);
 	pop_err();
 }
 bb_scene_Scene.prototype.m_Update=function(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<44>";
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<44>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<47>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<47>";
 	var t_=this.f_Trees.m_ObjectEnumerator();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<44>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<47>";
 	while(t_.m_HasNext()){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<44>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<47>";
 		var t_tTree=t_.m_NextObject();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<45>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<48>";
 		t_tTree.m_Update();
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<48>";
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<48>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<51>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<51>";
 	var t_2=this.f_Houses.m_ObjectEnumerator();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<48>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<51>";
 	while(t_2.m_HasNext()){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<48>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<51>";
 		var t_tHouse=t_2.m_NextObject();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<49>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<52>";
 		t_tHouse.m_Update();
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<52>";
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<52>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<55>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<55>";
 	var t_3=this.f_Stars.m_ObjectEnumerator();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<52>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<55>";
 	while(t_3.m_HasNext()){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<52>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<55>";
 		var t_tStar=t_3.m_NextObject();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<53>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<56>";
 		t_tStar.m_Update();
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<56>";
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<56>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<59>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<59>";
 	var t_4=this.f_Snowmen.m_ObjectEnumerator();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<56>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<59>";
 	while(t_4.m_HasNext()){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<56>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<59>";
 		var t_tSnowman=t_4.m_NextObject();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<57>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<60>";
 		t_tSnowman.m_Update();
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<60>";
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<60>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<63>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<63>";
 	var t_5=this.f_Snowflakes.m_ObjectEnumerator();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<60>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<63>";
 	while(t_5.m_HasNext()){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<60>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<63>";
 		var t_tSnowflake=t_5.m_NextObject();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<61>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<64>";
 		t_tSnowflake.m_Update();
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<64>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<67>";
 	if(bb_random_Rnd()<0.1){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<65>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<68>";
 		this.m_AddSnowFlake();
 	}
 	pop_err();
 }
 bb_scene_Scene.prototype.m_Render=function(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<71>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<74>";
 	bb_graphics_SetColor(255.0,255.0,255.0);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<72>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<75>";
 	bb_graphics_SetAlpha(1.0);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<73>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<76>";
 	bb_graphics_DrawImage(bb_scene_Scene_Background,0.0,0.0,0);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<75>";
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<75>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<78>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<78>";
 	var t_=this.f_Stars.m_ObjectEnumerator();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<75>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<78>";
 	while(t_.m_HasNext()){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<75>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<78>";
 		var t_tStar=t_.m_NextObject();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<76>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<79>";
 		t_tStar.m_Render();
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<79>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<82>";
+	bb_graphics_SetAlpha(1.0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<84>";
 	this.f_moon.m_Render();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<81>";
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<81>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<86>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<86>";
 	var t_2=this.f_Trees.m_ObjectEnumerator();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<81>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<86>";
 	while(t_2.m_HasNext()){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<81>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<86>";
 		var t_tTree=t_2.m_NextObject();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<82>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<87>";
 		t_tTree.m_Render();
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<85>";
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<85>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<90>";
+	bb_graphics_SetAlpha(1.0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<92>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<92>";
 	var t_3=this.f_Houses.m_ObjectEnumerator();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<85>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<92>";
 	while(t_3.m_HasNext()){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<85>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<92>";
 		var t_tHouse=t_3.m_NextObject();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<86>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<93>";
 		t_tHouse.m_Render();
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<89>";
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<89>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<96>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<96>";
 	var t_4=this.f_Snowmen.m_ObjectEnumerator();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<89>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<96>";
 	while(t_4.m_HasNext()){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<89>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<96>";
 		var t_tSnowman=t_4.m_NextObject();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<90>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<97>";
 		t_tSnowman.m_Render();
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<93>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<100>";
 	for(var t_i=0;t_i<this.f_FloorSegmentCount;t_i=t_i+1){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<94>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<101>";
 		dbg_array(this.f_FloorSegments,t_i)[dbg_index].m_Render();
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<97>";
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<97>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<104>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<104>";
 	var t_5=this.f_Snowflakes.m_ObjectEnumerator();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<97>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<104>";
 	while(t_5.m_HasNext()){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<97>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<104>";
 		var t_tSnowflake=t_5.m_NextObject();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<98>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<105>";
 		t_tSnowflake.m_Render();
 	}
 	pop_err();
@@ -2591,211 +2601,6 @@ function bb_map_StringMap2_new(){
 	pop_err();
 	return this;
 }
-function bb_autofit_VirtualDisplay(){
-	Object.call(this);
-	this.f_vwidth=.0;
-	this.f_vheight=.0;
-	this.f_vzoom=.0;
-	this.f_lastvzoom=.0;
-	this.f_vratio=.0;
-	this.f_lastdevicewidth=0;
-	this.f_lastdeviceheight=0;
-	this.f_device_changed=0;
-	this.f_fdw=.0;
-	this.f_fdh=.0;
-	this.f_dratio=.0;
-	this.f_multi=.0;
-	this.f_heightborder=.0;
-	this.f_widthborder=.0;
-	this.f_zoom_changed=0;
-	this.f_realx=.0;
-	this.f_realy=.0;
-	this.f_offx=.0;
-	this.f_offy=.0;
-	this.f_sx=.0;
-	this.f_sw=.0;
-	this.f_sy=.0;
-	this.f_sh=.0;
-	this.f_scaledw=.0;
-	this.f_scaledh=.0;
-	this.f_vxoff=.0;
-	this.f_vyoff=.0;
-}
-var bb_autofit_VirtualDisplay_Display;
-function bb_autofit_VirtualDisplay_new(t_width,t_height,t_zoom){
-	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<266>";
-	this.f_vwidth=(t_width);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<267>";
-	this.f_vheight=(t_height);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<269>";
-	this.f_vzoom=t_zoom;
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<270>";
-	this.f_lastvzoom=this.f_vzoom+1.0;
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<274>";
-	this.f_vratio=this.f_vheight/this.f_vwidth;
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<278>";
-	bb_autofit_VirtualDisplay_Display=this;
-	pop_err();
-	return this;
-}
-function bb_autofit_VirtualDisplay_new2(){
-	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<216>";
-	pop_err();
-	return this;
-}
-bb_autofit_VirtualDisplay.prototype.m_UpdateVirtualDisplay=function(t_zoomborders,t_keepborders){
-	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<444>";
-	if(bb_graphics_DeviceWidth()!=this.f_lastdevicewidth || bb_graphics_DeviceHeight()!=this.f_lastdeviceheight){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<445>";
-		this.f_lastdevicewidth=bb_graphics_DeviceWidth();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<446>";
-		this.f_lastdeviceheight=bb_graphics_DeviceHeight();
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<447>";
-		this.f_device_changed=1;
-	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<454>";
-	if((this.f_device_changed)!=0){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<459>";
-		this.f_fdw=(bb_graphics_DeviceWidth());
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<460>";
-		this.f_fdh=(bb_graphics_DeviceHeight());
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<465>";
-		this.f_dratio=this.f_fdh/this.f_fdw;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<469>";
-		if(this.f_dratio>this.f_vratio){
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<478>";
-			this.f_multi=this.f_fdw/this.f_vwidth;
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<482>";
-			this.f_heightborder=(this.f_fdh-this.f_vheight*this.f_multi)*0.5;
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<483>";
-			this.f_widthborder=0.0;
-		}else{
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<494>";
-			this.f_multi=this.f_fdh/this.f_vheight;
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<498>";
-			this.f_widthborder=(this.f_fdw-this.f_vwidth*this.f_multi)*0.5;
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<499>";
-			this.f_heightborder=0.0;
-		}
-	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<509>";
-	if(this.f_vzoom!=this.f_lastvzoom){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<510>";
-		this.f_lastvzoom=this.f_vzoom;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<511>";
-		this.f_zoom_changed=1;
-	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<518>";
-	if(((this.f_zoom_changed)!=0) || ((this.f_device_changed)!=0)){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<520>";
-		if(t_zoomborders){
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<524>";
-			this.f_realx=this.f_vwidth*this.f_vzoom*this.f_multi;
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<525>";
-			this.f_realy=this.f_vheight*this.f_vzoom*this.f_multi;
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<529>";
-			this.f_offx=(this.f_fdw-this.f_realx)*0.5;
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<530>";
-			this.f_offy=(this.f_fdh-this.f_realy)*0.5;
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<532>";
-			if(t_keepborders){
-				err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<538>";
-				if(this.f_offx<this.f_widthborder){
-					err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<539>";
-					this.f_sx=this.f_widthborder;
-					err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<540>";
-					this.f_sw=this.f_fdw-this.f_widthborder*2.0;
-				}else{
-					err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<542>";
-					this.f_sx=this.f_offx;
-					err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<543>";
-					this.f_sw=this.f_fdw-this.f_offx*2.0;
-				}
-				err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<546>";
-				if(this.f_offy<this.f_heightborder){
-					err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<547>";
-					this.f_sy=this.f_heightborder;
-					err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<548>";
-					this.f_sh=this.f_fdh-this.f_heightborder*2.0;
-				}else{
-					err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<550>";
-					this.f_sy=this.f_offy;
-					err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<551>";
-					this.f_sh=this.f_fdh-this.f_offy*2.0;
-				}
-			}else{
-				err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<556>";
-				this.f_sx=this.f_offx;
-				err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<557>";
-				this.f_sw=this.f_fdw-this.f_offx*2.0;
-				err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<559>";
-				this.f_sy=this.f_offy;
-				err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<560>";
-				this.f_sh=this.f_fdh-this.f_offy*2.0;
-			}
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<566>";
-			this.f_sx=bb_math_Max2(0.0,this.f_sx);
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<567>";
-			this.f_sy=bb_math_Max2(0.0,this.f_sy);
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<568>";
-			this.f_sw=bb_math_Min2(this.f_sw,this.f_fdw);
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<569>";
-			this.f_sh=bb_math_Min2(this.f_sh,this.f_fdh);
-		}else{
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<575>";
-			this.f_sx=bb_math_Max2(0.0,this.f_widthborder);
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<576>";
-			this.f_sy=bb_math_Max2(0.0,this.f_heightborder);
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<577>";
-			this.f_sw=bb_math_Min2(this.f_fdw-this.f_widthborder*2.0,this.f_fdw);
-			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<578>";
-			this.f_sh=bb_math_Min2(this.f_fdh-this.f_heightborder*2.0,this.f_fdh);
-		}
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<584>";
-		this.f_scaledw=this.f_vwidth*this.f_multi*this.f_vzoom;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<585>";
-		this.f_scaledh=this.f_vheight*this.f_multi*this.f_vzoom;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<589>";
-		this.f_vxoff=(this.f_fdw-this.f_scaledw)*0.5;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<590>";
-		this.f_vyoff=(this.f_fdh-this.f_scaledh)*0.5;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<594>";
-		this.f_vxoff=this.f_vxoff/this.f_multi/this.f_vzoom;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<595>";
-		this.f_vyoff=this.f_vyoff/this.f_multi/this.f_vzoom;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<599>";
-		this.f_device_changed=0;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<600>";
-		this.f_zoom_changed=0;
-	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<608>";
-	bb_graphics_SetScissor(0.0,0.0,(bb_graphics_DeviceWidth()),(bb_graphics_DeviceHeight()));
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<609>";
-	bb_graphics_Cls(0.0,0.0,0.0);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<615>";
-	bb_graphics_SetScissor(this.f_sx,this.f_sy,this.f_sw,this.f_sh);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<621>";
-	bb_graphics_Scale(this.f_multi*this.f_vzoom,this.f_multi*this.f_vzoom);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<627>";
-	if((this.f_vzoom)!=0.0){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<627>";
-		bb_graphics_Translate(this.f_vxoff,this.f_vyoff);
-	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<629>";
-	pop_err();
-	return 0;
-}
-function bb_autofit_SetVirtualDisplay(t_width,t_height,t_zoom){
-	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<110>";
-	bb_autofit_VirtualDisplay_new.call(new bb_autofit_VirtualDisplay,t_width,t_height,t_zoom);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<111>";
-	pop_err();
-	return 0;
-}
 function bb_floorsegment_FloorSegment(){
 	Object.call(this);
 	this.f_scene=null;
@@ -2827,18 +2632,79 @@ bb_floorsegment_FloorSegment.prototype.m_SetPos=function(t_tX,t_tY){
 bb_floorsegment_FloorSegment.prototype.m_Render=function(){
 	push_err();
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/floorsegment.monkey<21>";
-	bb_gfx_GFX_Draw(this.f_X,this.f_Y,0,96,bb_floorsegment_FloorSegment_Width,64);
+	bb_gfx_GFX_Draw(this.f_X,this.f_Y,0,96,bb_floorsegment_FloorSegment_Width,100);
 	pop_err();
 }
 function bb_tree_Tree(){
 	Object.call(this);
+	this.f_scene=null;
+	this.f_Lights=null;
+	this.f_Frame=0;
+	this.f_X=.0;
+	this.f_Y=.0;
+	this.f_BlinkRate=0;
+	this.f_BlinkRateTimer=0;
+}
+function bb_tree_Tree_new(t_tS){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<25>";
+	this.f_scene=t_tS;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<26>";
+	this.f_Lights=bb_list_List6_new.call(new bb_list_List6);
+	pop_err();
+	return this;
+}
+function bb_tree_Tree_new2(){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<3>";
+	pop_err();
+	return this;
+}
+bb_tree_Tree.prototype.m_SetPos2=function(t_tX,t_tY){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<48>";
+	this.f_X=t_tX;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<49>";
+	this.f_Y=t_tY;
+	pop_err();
 }
 bb_tree_Tree.prototype.m_Update=function(){
 	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<30>";
+	this.f_BlinkRateTimer+=1;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<31>";
+	if(this.f_BlinkRateTimer>=this.f_BlinkRate){
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<32>";
+		this.f_BlinkRateTimer=0;
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<33>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<33>";
+		var t_=this.f_Lights.m_ObjectEnumerator();
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<33>";
+		while(t_.m_HasNext()){
+			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<33>";
+			var t_tTL=t_.m_NextObject();
+			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<34>";
+			t_tTL.m_Blink();
+		}
+	}
 	pop_err();
 }
 bb_tree_Tree.prototype.m_Render=function(){
 	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<40>";
+	bb_graphics_SetAlpha(1.0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<41>";
+	bb_gfx_GFX_Draw(((this.f_X)|0),((this.f_Y)|0),16+this.f_Frame*16,96,16,32);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<42>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<42>";
+	var t_=this.f_Lights.m_ObjectEnumerator();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<42>";
+	while(t_.m_HasNext()){
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<42>";
+		var t_tTL=t_.m_NextObject();
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<43>";
+		t_tTL.m_Render();
+	}
 	pop_err();
 }
 function bb_list_List(){
@@ -2974,7 +2840,7 @@ function bb_list_List2_new2(t_data){
 bb_list_List2.prototype.m_ObjectEnumerator=function(){
 	push_err();
 	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<124>";
-	var t_=bb_list_Enumerator2_new.call(new bb_list_Enumerator2,this);
+	var t_=bb_list_Enumerator3_new.call(new bb_list_Enumerator3,this);
 	pop_err();
 	return t_;
 }
@@ -3022,13 +2888,61 @@ function bb_list_HeadNode2_new(){
 }
 function bb_star_Star(){
 	Object.call(this);
+	this.f_scene=null;
+	this.f_X=0;
+	this.f_Y=0;
+	this.f_alpha=.0;
+	this.f_changeTimer=0;
+	this.f_Frame=0;
+}
+function bb_star_Star_new(t_tS){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<23>";
+	this.f_scene=t_tS;
+	pop_err();
+	return this;
+}
+function bb_star_Star_new2(){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<3>";
+	pop_err();
+	return this;
+}
+bb_star_Star.prototype.m_SetPos2=function(t_tX,t_tY){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<40>";
+	this.f_X=((t_tX)|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<41>";
+	this.f_Y=((t_tY)|0);
+	pop_err();
+	return 0;
 }
 bb_star_Star.prototype.m_Update=function(){
 	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<27>";
+	this.f_changeTimer+=1;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<28>";
+	if(this.f_changeTimer>=10){
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<29>";
+		if(bb_random_Rnd()<0.25){
+			err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<30>";
+			this.f_Frame=((bb_random_Rnd2(0.0,5.0))|0);
+		}
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<32>";
+		this.f_changeTimer=0;
+	}
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<35>";
+	this.f_alpha+=bb_random_Rnd2(-0.1,0.1);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<36>";
+	this.f_alpha=bb_math_Clamp2(this.f_alpha,0.5,1.0);
 	pop_err();
 }
 bb_star_Star.prototype.m_Render=function(){
 	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<45>";
+	bb_graphics_SetAlpha(this.f_alpha);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/star.monkey<46>";
+	bb_gfx_GFX_Draw(this.f_X,this.f_Y,0+this.f_Frame*16,16,1,1);
 	pop_err();
 }
 function bb_list_List3(){
@@ -3069,7 +2983,7 @@ function bb_list_List3_new2(t_data){
 bb_list_List3.prototype.m_ObjectEnumerator=function(){
 	push_err();
 	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<124>";
-	var t_=bb_list_Enumerator3_new.call(new bb_list_Enumerator3,this);
+	var t_=bb_list_Enumerator4_new.call(new bb_list_Enumerator4,this);
 	pop_err();
 	return t_;
 }
@@ -3117,6 +3031,31 @@ function bb_list_HeadNode3_new(){
 }
 function bb_snowman_Snowman(){
 	Object.call(this);
+	this.f_scene=null;
+	this.f_head=null;
+	this.f_body=null;
+}
+function bb_snowman_Snowman_new(t_tS){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<13>";
+	this.f_scene=t_tS;
+	pop_err();
+	return this;
+}
+function bb_snowman_Snowman_new2(){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<3>";
+	pop_err();
+	return this;
+}
+bb_snowman_Snowman.prototype.m_SetPos2=function(t_tX,t_tY){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<26>";
+	this.f_head.m_SetPos2(t_tX,t_tY-24.0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<27>";
+	this.f_body.m_SetPos2(t_tX,t_tY-12.0);
+	pop_err();
+	return 0;
 }
 bb_snowman_Snowman.prototype.m_Update=function(){
 	push_err();
@@ -3124,6 +3063,10 @@ bb_snowman_Snowman.prototype.m_Update=function(){
 }
 bb_snowman_Snowman.prototype.m_Render=function(){
 	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<21>";
+	this.f_body.m_Render();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<22>";
+	this.f_head.m_Render();
 	pop_err();
 }
 function bb_list_List4(){
@@ -3164,7 +3107,7 @@ function bb_list_List4_new2(t_data){
 bb_list_List4.prototype.m_ObjectEnumerator=function(){
 	push_err();
 	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<124>";
-	var t_=bb_list_Enumerator4_new.call(new bb_list_Enumerator4,this);
+	var t_=bb_list_Enumerator5_new.call(new bb_list_Enumerator5,this);
 	pop_err();
 	return t_;
 }
@@ -3221,31 +3164,31 @@ function bb_snowflake_Snowflake(){
 }
 bb_snowflake_Snowflake.prototype.m_Update=function(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<24>";
-	this.f_X+=this.f_XS;
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<25>";
-	this.f_Y+=this.f_YS;
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<27>";
-	this.f_XS+=bb_random_Rnd2(-0.5,0.5);
+	this.f_X+=this.f_XS;
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<28>";
+	this.f_Y+=this.f_YS;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<30>";
+	this.f_XS+=bb_random_Rnd2(-0.1,0.1);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<31>";
 	this.f_YS+=bb_random_Rnd2(-0.1,0.1);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<29>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<32>";
 	if(this.f_YS<0.0){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<30>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<33>";
 		this.f_YS=0.0;
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<33>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<36>";
 	if(this.f_X>(bb_scene_Scene_Width+16) || this.f_Y>(bb_scene_Scene_Height+16)){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<34>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<37>";
 		dbg_object(this.f_scene).f_Snowflakes.m_Remove(this);
 	}
 	pop_err();
 }
 function bb_snowflake_Snowflake_new(t_tS){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<18>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<21>";
 	this.f_scene=t_tS;
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<19>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<22>";
 	this.f_Frame=0;
 	pop_err();
 	return this;
@@ -3258,7 +3201,7 @@ function bb_snowflake_Snowflake_new2(){
 }
 bb_snowflake_Snowflake.prototype.m_Render=function(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<40>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowflake.monkey<43>";
 	bb_gfx_GFX_Draw(((this.f_X)|0),((this.f_Y)|0),0+this.f_Frame*16,0,16,16);
 	pop_err();
 }
@@ -3300,7 +3243,7 @@ function bb_list_List5_new2(t_data){
 bb_list_List5.prototype.m_ObjectEnumerator=function(){
 	push_err();
 	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<124>";
-	var t_=bb_list_Enumerator5_new.call(new bb_list_Enumerator5,this);
+	var t_=bb_list_Enumerator6_new.call(new bb_list_Enumerator6,this);
 	pop_err();
 	return t_;
 }
@@ -3426,7 +3369,7 @@ bb_moon_Moon.prototype.m_Set=function(t_tX,t_tY,t_tF){
 bb_moon_Moon.prototype.m_Render=function(){
 	push_err();
 	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/moon.monkey<22>";
-	bb_gfx_GFX_Draw(((this.f_X)|0),((this.f_Y)|0),((0.0+this.f_Frame*32.0)|0),0,32,32);
+	bb_gfx_GFX_Draw(((this.f_X)|0),((this.f_Y)|0),((0.0+this.f_Frame*32.0)|0),208,32,32);
 	pop_err();
 }
 function bb_random_Rnd(){
@@ -3452,28 +3395,332 @@ function bb_random_Rnd3(t_range){
 	pop_err();
 	return t_;
 }
+function bb_treelight_TreeLight(){
+	Object.call(this);
+	this.f_tree=null;
+	this.f_scene=null;
+	this.f_Frame=0;
+	this.f_X=.0;
+	this.f_Y=.0;
+	this.f_Bright=false;
+}
+function bb_treelight_TreeLight_new(t_tT){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<25>";
+	this.f_tree=t_tT;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<26>";
+	this.f_scene=dbg_object(t_tT).f_scene;
+	pop_err();
+	return this;
+}
+function bb_treelight_TreeLight_new2(){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<3>";
+	pop_err();
+	return this;
+}
+bb_treelight_TreeLight.prototype.m_SetPos2=function(t_tX,t_tY){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<47>";
+	this.f_X=t_tX;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<48>";
+	this.f_Y=t_tY;
+	pop_err();
+}
+bb_treelight_TreeLight.prototype.m_Blink=function(){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<43>";
+	this.f_Bright=!this.f_Bright;
+	pop_err();
+}
+bb_treelight_TreeLight.prototype.m_Render=function(){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<34>";
+	if(this.f_Bright){
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<35>";
+		bb_graphics_SetAlpha(1.0);
+	}else{
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<37>";
+		bb_graphics_SetAlpha(0.2);
+	}
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<39>";
+	bb_gfx_GFX_Draw(((this.f_X)|0),((this.f_Y)|0),0+this.f_Frame*16,64,3,3);
+	pop_err();
+}
+function bb_list_List6(){
+	Object.call(this);
+	this.f__head=(bb_list_HeadNode6_new.call(new bb_list_HeadNode6));
+}
+function bb_list_List6_new(){
+	push_err();
+	pop_err();
+	return this;
+}
+bb_list_List6.prototype.m_AddLast6=function(t_data){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<120>";
+	var t_=bb_list_Node6_new.call(new bb_list_Node6,this.f__head,dbg_object(this.f__head).f__pred,t_data);
+	pop_err();
+	return t_;
+}
+function bb_list_List6_new2(t_data){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<13>";
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<13>";
+	var t_=t_data;
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<13>";
+	var t_2=0;
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<13>";
+	while(t_2<t_.length){
+		err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<13>";
+		var t_t=dbg_array(t_,t_2)[dbg_index];
+		err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<13>";
+		t_2=t_2+1;
+		err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<14>";
+		this.m_AddLast6(t_t);
+	}
+	pop_err();
+	return this;
+}
+bb_list_List6.prototype.m_ObjectEnumerator=function(){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<124>";
+	var t_=bb_list_Enumerator2_new.call(new bb_list_Enumerator2,this);
+	pop_err();
+	return t_;
+}
+function bb_list_Node6(){
+	Object.call(this);
+	this.f__succ=null;
+	this.f__pred=null;
+	this.f__data=null;
+}
+function bb_list_Node6_new(t_succ,t_pred,t_data){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<199>";
+	this.f__succ=t_succ;
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<200>";
+	this.f__pred=t_pred;
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<201>";
+	dbg_object(this.f__succ).f__pred=this;
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<202>";
+	dbg_object(this.f__pred).f__succ=this;
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<203>";
+	this.f__data=t_data;
+	pop_err();
+	return this;
+}
+function bb_list_Node6_new2(){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<196>";
+	pop_err();
+	return this;
+}
+function bb_list_HeadNode6(){
+	bb_list_Node6.call(this);
+}
+bb_list_HeadNode6.prototype=extend_class(bb_list_Node6);
+function bb_list_HeadNode6_new(){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<248>";
+	bb_list_Node6_new2.call(this);
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<249>";
+	this.f__succ=(this);
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<250>";
+	this.f__pred=(this);
+	pop_err();
+	return this;
+}
+function bb_treelight_GenerateTreeLight(t_tT){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<54>";
+	var t_tL=bb_treelight_TreeLight_new.call(new bb_treelight_TreeLight,t_tT);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<55>";
+	dbg_object(t_tL).f_Frame=((bb_random_Rnd2(0.0,4.0))|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/treelight.monkey<56>";
+	pop_err();
+	return t_tL;
+}
+function bb_tree_GenerateTree(t_tScene){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<56>";
+	var t_tT=bb_tree_Tree_new.call(new bb_tree_Tree,t_tScene);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<58>";
+	var t_tX=bb_random_Rnd2(-8.0,(bb_scene_Scene_Width-8));
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<59>";
+	var t_tY=t_tScene.m_GetFloorYAtX(t_tX)-32.0;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<61>";
+	dbg_object(t_tT).f_Frame=((bb_random_Rnd2(0.0,2.0))|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<63>";
+	t_tT.m_SetPos2(t_tX,t_tY);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<65>";
+	dbg_object(t_tT).f_BlinkRate=((bb_random_Rnd2(3.0,20.0))|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<67>";
+	var t_tLC=((bb_random_Rnd2(5.0,10.0))|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<68>";
+	for(var t_i=0;t_i<t_tLC;t_i=t_i+1){
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<69>";
+		var t_tL=bb_treelight_GenerateTreeLight(t_tT);
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<70>";
+		t_tL.m_SetPos2(bb_random_Rnd2(t_tX+4.0,t_tX+12.0),bb_random_Rnd2(t_tY+8.0,t_tY+24.0));
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<71>";
+		dbg_object(t_tT).f_Lights.m_AddLast6(t_tL);
+	}
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/tree.monkey<74>";
+	pop_err();
+	return t_tT;
+}
+function bb_snowmanhead_SnowmanHead(){
+	Object.call(this);
+	this.f_snowman=null;
+	this.f_scene=null;
+	this.f_Frame=0;
+	this.f_X=.0;
+	this.f_Y=.0;
+}
+function bb_snowmanhead_SnowmanHead_new(t_tSnowman){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanhead.monkey<22>";
+	this.f_snowman=t_tSnowman;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanhead.monkey<23>";
+	this.f_scene=dbg_object(t_tSnowman).f_scene;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanhead.monkey<24>";
+	this.f_Frame=0;
+	pop_err();
+	return this;
+}
+function bb_snowmanhead_SnowmanHead_new2(){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanhead.monkey<3>";
+	pop_err();
+	return this;
+}
+bb_snowmanhead_SnowmanHead.prototype.m_SetPos2=function(t_tX,t_tY){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanhead.monkey<32>";
+	this.f_X=t_tX;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanhead.monkey<33>";
+	this.f_Y=t_tY;
+	pop_err();
+}
+bb_snowmanhead_SnowmanHead.prototype.m_Render=function(){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanhead.monkey<37>";
+	bb_gfx_GFX_Draw(((this.f_X)|0),((this.f_Y)|0),0+this.f_Frame*16,32,16,16);
+	pop_err();
+}
+function bb_snowmanbody_SnowmanBody(){
+	Object.call(this);
+	this.f_snowman=null;
+	this.f_scene=null;
+	this.f_Frame=0;
+	this.f_X=.0;
+	this.f_Y=.0;
+}
+function bb_snowmanbody_SnowmanBody_new(t_tSnowman){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanbody.monkey<22>";
+	this.f_snowman=t_tSnowman;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanbody.monkey<23>";
+	this.f_scene=dbg_object(t_tSnowman).f_scene;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanbody.monkey<24>";
+	this.f_Frame=0;
+	pop_err();
+	return this;
+}
+function bb_snowmanbody_SnowmanBody_new2(){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanbody.monkey<3>";
+	pop_err();
+	return this;
+}
+bb_snowmanbody_SnowmanBody.prototype.m_SetPos2=function(t_tX,t_tY){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanbody.monkey<28>";
+	this.f_X=t_tX;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanbody.monkey<29>";
+	this.f_Y=t_tY;
+	pop_err();
+}
+bb_snowmanbody_SnowmanBody.prototype.m_Render=function(){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowmanbody.monkey<37>";
+	bb_gfx_GFX_Draw(((this.f_X)|0),((this.f_Y)|0),0+this.f_Frame*16,48,16,16);
+	pop_err();
+}
+function bb_snowman_GenerateSnowman(t_tScene){
+	push_err();
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<33>";
+	var t_tS=bb_snowman_Snowman_new.call(new bb_snowman_Snowman,t_tScene);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<34>";
+	dbg_object(t_tS).f_head=bb_snowmanhead_SnowmanHead_new.call(new bb_snowmanhead_SnowmanHead,t_tS);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<35>";
+	dbg_object(t_tS).f_body=bb_snowmanbody_SnowmanBody_new.call(new bb_snowmanbody_SnowmanBody,t_tS);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<36>";
+	dbg_object(dbg_object(t_tS).f_head).f_Frame=((bb_random_Rnd2(0.0,4.0))|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<37>";
+	dbg_object(dbg_object(t_tS).f_body).f_Frame=((bb_random_Rnd2(0.0,4.0))|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<39>";
+	var t_tX=bb_random_Rnd2(-8.0,(bb_scene_Scene_Width-8));
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<40>";
+	var t_tY=t_tScene.m_GetFloorYAtX(t_tX);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<42>";
+	t_tS.m_SetPos2(t_tX,t_tY);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/snowman.monkey<44>";
+	pop_err();
+	return t_tS;
+}
 function bb_scene_GenerateScene(){
 	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<123>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<134>";
 	var t_tS=bb_scene_Scene_new.call(new bb_scene_Scene);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<126>";
-	var t_sY=bb_random_Rnd2((bb_scene_Scene_Height)*0.66,(bb_scene_Scene_Height)*0.9);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<127>";
-	var t_fY=t_sY;
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<128>";
-	var t_maxFlux=bb_random_Rnd2(5.0,30.0);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<129>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<137>";
+	dbg_object(t_tS).f_FloorStartY=bb_random_Rnd2((bb_scene_Scene_Height-64),(bb_scene_Scene_Height)*0.9);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<138>";
+	var t_fY=dbg_object(t_tS).f_FloorStartY;
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<139>";
+	dbg_object(t_tS).f_FloorHFlux=bb_random_Rnd2(1.0,2.0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<140>";
+	dbg_object(t_tS).f_FloorVFlux=bb_random_Rnd2(5.0,10.0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<141>";
 	for(var t_i=0;t_i<dbg_object(t_tS).f_FloorSegmentCount;t_i=t_i+1){
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<130>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<142>";
 		var t_fX=t_i*bb_floorsegment_FloorSegment_Width;
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<131>";
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<143>";
 		dbg_array(dbg_object(t_tS).f_FloorSegments,t_i)[dbg_index].m_SetPos(t_fX,((t_fY)|0));
-		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<132>";
-		t_fY=t_sY+Math.sin((t_fX)*D2R)*t_maxFlux;
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<144>";
+		t_fY=dbg_object(t_tS).f_FloorStartY+Math.sin(((t_fX)*dbg_object(t_tS).f_FloorHFlux)*D2R)*dbg_object(t_tS).f_FloorVFlux;
 	}
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<136>";
-	dbg_object(t_tS).f_moon.m_Set(bb_random_Rnd2(-32.0,(bb_scene_Scene_Width-32)),bb_random_Rnd2(-32.0,(bb_scene_Scene_Height)*0.33),((bb_random_Rnd2(0.0,6.0))|0));
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<149>";
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<148>";
+	dbg_object(t_tS).f_moon.m_Set(bb_random_Rnd2(-32.0,(bb_scene_Scene_Width-32)),bb_random_Rnd2(-32.0,(bb_scene_Scene_Height)*0.33),((bb_random_Rnd2(0.0,4.0))|0));
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<151>";
+	var t_tSC=((bb_random_Rnd2(20.0,80.0))|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<152>";
+	for(var t_i2=0;t_i2<t_tSC;t_i2=t_i2+1){
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<153>";
+		var t_tStar=bb_star_Star_new.call(new bb_star_Star,t_tS);
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<154>";
+		t_tStar.m_SetPos2(bb_random_Rnd2(0.0,(bb_scene_Scene_Width)),bb_random_Rnd2(0.0,(bb_scene_Scene_Height)));
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<155>";
+		dbg_object(t_tStar).f_alpha=bb_random_Rnd2(0.5,1.0);
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<156>";
+		dbg_object(t_tS).f_Stars.m_AddLast3(t_tStar);
+	}
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<161>";
+	t_tSC=((bb_random_Rnd2(0.0,4.0))|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<162>";
+	for(var t_i3=0;t_i3<t_tSC;t_i3=t_i3+1){
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<163>";
+		dbg_object(t_tS).f_Trees.m_AddLast(bb_tree_GenerateTree(t_tS));
+	}
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<169>";
+	t_tSC=((bb_random_Rnd2(0.0,4.0))|0);
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<170>";
+	for(var t_i4=0;t_i4<t_tSC;t_i4=t_i4+1){
+		err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<171>";
+		dbg_object(t_tS).f_Snowmen.m_AddLast4(bb_snowman_GenerateSnowman(t_tS));
+	}
+	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/scene.monkey<174>";
 	pop_err();
 	return t_tS;
 }
@@ -3645,6 +3892,42 @@ bb_list_Enumerator4.prototype.m_NextObject=function(){
 	pop_err();
 	return t_data;
 }
+function bb_math_Clamp(t_n,t_min,t_max){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<61>";
+	if(t_n<t_min){
+		err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<61>";
+		pop_err();
+		return t_min;
+	}
+	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<62>";
+	if(t_n>t_max){
+		err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<62>";
+		pop_err();
+		return t_max;
+	}
+	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<63>";
+	pop_err();
+	return t_n;
+}
+function bb_math_Clamp2(t_n,t_min,t_max){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<88>";
+	if(t_n<t_min){
+		err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<88>";
+		pop_err();
+		return t_min;
+	}
+	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<89>";
+	if(t_n>t_max){
+		err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<89>";
+		pop_err();
+		return t_max;
+	}
+	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<90>";
+	pop_err();
+	return t_n;
+}
 function bb_list_Enumerator5(){
 	Object.call(this);
 	this.f__list=null;
@@ -3687,53 +3970,47 @@ bb_list_Enumerator5.prototype.m_NextObject=function(){
 	pop_err();
 	return t_data;
 }
-function bb_math_Max(t_x,t_y){
-	push_err();
-	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<56>";
-	if(t_x>t_y){
-		err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<56>";
-		pop_err();
-		return t_x;
-	}
-	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<57>";
-	pop_err();
-	return t_y;
+function bb_list_Enumerator6(){
+	Object.call(this);
+	this.f__list=null;
+	this.f__curr=null;
 }
-function bb_math_Max2(t_x,t_y){
+function bb_list_Enumerator6_new(t_list){
 	push_err();
-	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<83>";
-	if(t_x>t_y){
-		err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<83>";
-		pop_err();
-		return t_x;
-	}
-	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<84>";
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<264>";
+	this.f__list=t_list;
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<265>";
+	this.f__curr=dbg_object(dbg_object(t_list).f__head).f__succ;
 	pop_err();
-	return t_y;
+	return this;
 }
-function bb_math_Min(t_x,t_y){
+function bb_list_Enumerator6_new2(){
 	push_err();
-	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<51>";
-	if(t_x<t_y){
-		err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<51>";
-		pop_err();
-		return t_x;
-	}
-	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<52>";
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<261>";
 	pop_err();
-	return t_y;
+	return this;
 }
-function bb_math_Min2(t_x,t_y){
+bb_list_Enumerator6.prototype.m_HasNext=function(){
 	push_err();
-	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<78>";
-	if(t_x<t_y){
-		err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<78>";
-		pop_err();
-		return t_x;
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<269>";
+	while(dbg_object(dbg_object(this.f__curr).f__succ).f__pred!=this.f__curr){
+		err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<270>";
+		this.f__curr=dbg_object(this.f__curr).f__succ;
 	}
-	err_info="C:/apps/MonkeyPro66/modules/monkey/math.monkey<79>";
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<272>";
+	var t_=this.f__curr!=dbg_object(this.f__list).f__head;
 	pop_err();
-	return t_y;
+	return t_;
+}
+bb_list_Enumerator6.prototype.m_NextObject=function(){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<276>";
+	var t_data=dbg_object(this.f__curr).f__data;
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<277>";
+	this.f__curr=dbg_object(this.f__curr).f__succ;
+	err_info="C:/apps/MonkeyPro66/modules/monkey/list.monkey<278>";
+	pop_err();
+	return t_data;
 }
 function bb_graphics_DebugRenderDevice(){
 	push_err();
@@ -3751,6 +4028,27 @@ function bb_graphics_Cls(t_r,t_g,t_b){
 	bb_graphics_DebugRenderDevice();
 	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<356>";
 	bb_graphics_renderDevice.Cls(t_r,t_g,t_b);
+	pop_err();
+	return 0;
+}
+function bb_graphics_PushMatrix(){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<310>";
+	var t_sp=dbg_object(bb_graphics_context).f_matrixSp;
+	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<311>";
+	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+0)[dbg_index]=dbg_object(bb_graphics_context).f_ix
+	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<312>";
+	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+1)[dbg_index]=dbg_object(bb_graphics_context).f_iy
+	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<313>";
+	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+2)[dbg_index]=dbg_object(bb_graphics_context).f_jx
+	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<314>";
+	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+3)[dbg_index]=dbg_object(bb_graphics_context).f_jy
+	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<315>";
+	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+4)[dbg_index]=dbg_object(bb_graphics_context).f_tx
+	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<316>";
+	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+5)[dbg_index]=dbg_object(bb_graphics_context).f_ty
+	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<317>";
+	dbg_object(bb_graphics_context).f_matrixSp=t_sp+6;
 	pop_err();
 	return 0;
 }
@@ -3780,46 +4078,10 @@ function bb_graphics_Transform2(t_m){
 	pop_err();
 	return 0;
 }
-function bb_graphics_Scale(t_x,t_y){
-	push_err();
-	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<345>";
-	bb_graphics_Transform(t_x,0.0,0.0,t_y,0.0,0.0);
-	pop_err();
-	return 0;
-}
 function bb_graphics_Translate(t_x,t_y){
 	push_err();
 	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<341>";
 	bb_graphics_Transform(1.0,0.0,0.0,1.0,t_x,t_y);
-	pop_err();
-	return 0;
-}
-function bb_autofit_UpdateVirtualDisplay(t_zoomborders,t_keepborders){
-	push_err();
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<171>";
-	bb_autofit_VirtualDisplay_Display.m_UpdateVirtualDisplay(t_zoomborders,t_keepborders);
-	err_info="C:/Users/Chris/Documents/GitHub/CM-XMAS-2012/src/autofit.monkey<172>";
-	pop_err();
-	return 0;
-}
-function bb_graphics_PushMatrix(){
-	push_err();
-	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<310>";
-	var t_sp=dbg_object(bb_graphics_context).f_matrixSp;
-	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<311>";
-	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+0)[dbg_index]=dbg_object(bb_graphics_context).f_ix
-	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<312>";
-	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+1)[dbg_index]=dbg_object(bb_graphics_context).f_iy
-	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<313>";
-	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+2)[dbg_index]=dbg_object(bb_graphics_context).f_jx
-	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<314>";
-	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+3)[dbg_index]=dbg_object(bb_graphics_context).f_jy
-	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<315>";
-	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+4)[dbg_index]=dbg_object(bb_graphics_context).f_tx
-	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<316>";
-	dbg_array(dbg_object(bb_graphics_context).f_matrixStack,t_sp+5)[dbg_index]=dbg_object(bb_graphics_context).f_ty
-	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<317>";
-	dbg_object(bb_graphics_context).f_matrixSp=t_sp+6;
 	pop_err();
 	return 0;
 }
@@ -3877,6 +4139,13 @@ function bb_graphics_Rotate(t_angle){
 	push_err();
 	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<349>";
 	bb_graphics_Transform(Math.cos((t_angle)*D2R),-Math.sin((t_angle)*D2R),Math.sin((t_angle)*D2R),Math.cos((t_angle)*D2R),0.0,0.0);
+	pop_err();
+	return 0;
+}
+function bb_graphics_Scale(t_x,t_y){
+	push_err();
+	err_info="C:/apps/MonkeyPro66/modules/mojo/graphics.monkey<345>";
+	bb_graphics_Transform(t_x,0.0,0.0,t_y,0.0,0.0);
 	pop_err();
 	return 0;
 }
@@ -3977,7 +4246,6 @@ function bbInit(){
 	bb_sfx_SFX_ActiveChannel=0;
 	bb_sfx_SFX_Sounds=null;
 	bb_sfx_SFX_Musics=null;
-	bb_autofit_VirtualDisplay_Display=null;
 	bb_scene_Scene_Width=360;
 	bb_floorsegment_FloorSegment_Width=8;
 	bb_scene_Scene_Height=240;

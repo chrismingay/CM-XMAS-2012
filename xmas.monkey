@@ -13,12 +13,15 @@ Import src.floorsegment
 Import src.functions
 Import src.gfx
 Import src.house
+Import src.housedoor
 Import src.houselight
 Import src.moon
 Import src.scene
 Import src.sfx
 Import src.snowflake
 Import src.snowman
+Import src.snowmanbody
+Import src.snowmanhead
 Import src.star
 Import src.tree
 Import src.treelight
@@ -37,7 +40,7 @@ Class XmasApp Extends App
 		Scene.Init()
 		SFX.Init()
 		
-		SetVirtualDisplay(360,240)
+		'SetVirtualDisplay(360,240)
 		
 		scene = GenerateScene()
 	
@@ -53,7 +56,7 @@ Class XmasApp Extends App
 	
 	Method OnRender:Int()
 	
-		UpdateVirtualDisplay()
+		'UpdateVirtualDisplay()
 		
 		Cls
 	

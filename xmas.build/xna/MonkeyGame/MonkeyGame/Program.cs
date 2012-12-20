@@ -3055,7 +3055,7 @@ class bb_scene{
 		bb_scene_Scene t_tS=(new bb_scene_Scene()).g_Scene_new();
 		float t_sY=bb_random.bb_random_Rnd2((float)(bb_scene_Scene.g_Height)*0.66f,(float)(bb_scene_Scene.g_Height)*0.9f);
 		float t_fY=t_sY;
-		float t_maxFlux=bb_random.bb_random_Rnd2(5.0f,30.0f);
+		float t_maxFlux=bb_random.bb_random_Rnd2(5.0f,10.0f);
 		for(int t_i=0;t_i<t_tS.f_FloorSegmentCount;t_i=t_i+1){
 			int t_fX=t_i*bb_floorsegment_FloorSegment.g_Width;
 			t_tS.f_FloorSegments[t_i].m_SetPos(t_fX,(int)(t_fY));
